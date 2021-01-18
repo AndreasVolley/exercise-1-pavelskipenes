@@ -1,7 +1,7 @@
-CC = clang
+CC = gcc
 
-CFLAGS = -Wall -g -std=c99 
-LDFLAGS = -lpthread -g
+CFLAGS = -Wall -Wextra -g3 -std=c99 -fanalyzer
+LDFLAGS = -lpthread -g3
 SRC = foo.c
 
 TARGET = foo
@@ -26,3 +26,7 @@ clean:
 rebuild:	clean all
 
 .PHONY: all rebuild clean
+
+.PHONY: format
+format:
+	indent --linux-style --line-length0 *.c
