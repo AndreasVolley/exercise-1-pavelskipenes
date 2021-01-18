@@ -2,33 +2,71 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <stdio.h>
+#include <assert.h>
 
-static int i = 0;
-const static int ITERATIONS = 1000000;
+#define mutex_lock
 
-static void* incrementingThreadFunction(){
-    for(size_t _ = 0; _ < ITERATIONS; _++){
-        i++;
-    }
-    return NULL;
+int i = 0;
+static const size_t ITERATIONS = 1000000;
+
+static void *incrementingThreadFunction()
+{
+	for (size_t _ = 0; _ < ITERATIONS; _++) {
+#ifdef mutex_lock
+		int pthread_mutex_lock(pthread_mutex_t * mutex);
+#endif
+
+		i++;
+
+#ifdef mutex_lock
+		int pthread_mutex_unlock(pthread_mutex_t * mutex);
+#endif
+	}
+	return NULL;
 }
 
-static void* decrementingThreadFunction(){
-    for(size_t _ = 0; _ < ITERATIONS; _++){
-        i--;
-    }
-    return NULL;
+static void *decrementingThreadFunction()
+{
+	for (size_t _ = 0; _ < ITERATIONS; _++) {
+
+#ifdef mutex_lock
+		int pthread_mutex_lock(pthread_mutex_t * mutex);
+#endif
+
+		i--;
+
+#ifdef mutex_lock
+		int pthread_mutex_unlock(pthread_mutex_t * mutex);
+#endif
+	}
+	return NULL;
 }
 
-int main(){
-    pthread_t incrementingThread, decrementingThread;
+int main()
+{
+	// init variables
+#ifdef mutex_lock
+	int pthread_mutex_init(pthread_mutex_t * restrict mutex, const pthread_mutexattr_t * restrict attr);
+#endif
+	pthread_t incrementingThread, decrementingThread;
+	int err;
 
-    pthread_create(&incrementingThread, NULL, incrementingThreadFunction, NULL);
-    pthread_create(&decrementingThread, NULL, decrementingThreadFunction, NULL);
-    
-    pthread_join(incrementingThread, NULL);
-    pthread_join(decrementingThread, NULL);
-    
-    printf("The magic number is: %d\n", i);
-    return EXIT_SUCCESS;
+	// create threads
+	err = pthread_create(&incrementingThread, NULL, incrementingThreadFunction, NULL);
+	assert(err == 0);
+
+	err = pthread_create(&decrementingThread, NULL, decrementingThreadFunction, NULL);
+	assert(err == 0);
+
+	// wait
+	pthread_join(incrementingThread, NULL);
+	pthread_join(decrementingThread, NULL);
+
+	// cleanup
+#ifdef mutex_lock
+	int pthread_mutex_destroy(pthread_mutex_t * mutex);
+#endif
+
+	printf("The magic number is: %d\n", i);
+	return EXIT_SUCCESS;
 }
