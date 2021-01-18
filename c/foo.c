@@ -9,34 +9,34 @@
 int i = 0;
 static const size_t ITERATIONS = 1000000;
 
-static void *incrementingThreadFunction()
+static void *incrementingThreadFunction(void* lock)
 {
 	for (size_t _ = 0; _ < ITERATIONS; _++) {
 #ifdef mutex_lock
-		int pthread_mutex_lock(pthread_mutex_t * mutex);
+		pthread_mutex_lock(lock);
 #endif
 
 		i++;
 
 #ifdef mutex_lock
-		int pthread_mutex_unlock(pthread_mutex_t * mutex);
+		pthread_mutex_unlock(lock);
 #endif
 	}
 	return NULL;
 }
 
-static void *decrementingThreadFunction()
+static void *decrementingThreadFunction(void* lock)
 {
 	for (size_t _ = 0; _ < ITERATIONS; _++) {
 
 #ifdef mutex_lock
-		int pthread_mutex_lock(pthread_mutex_t * mutex);
+		pthread_mutex_lock(lock);;
 #endif
 
 		i--;
 
 #ifdef mutex_lock
-		int pthread_mutex_unlock(pthread_mutex_t * mutex);
+		pthread_mutex_unlock(lock);
 #endif
 	}
 	return NULL;
@@ -46,16 +46,17 @@ int main()
 {
 	// init variables
 #ifdef mutex_lock
-	int pthread_mutex_init(pthread_mutex_t * restrict mutex, const pthread_mutexattr_t * restrict attr);
+	pthread_mutex_t lock;
 #endif
+
 	pthread_t incrementingThread, decrementingThread;
 	int err;
 
 	// create threads
-	err = pthread_create(&incrementingThread, NULL, incrementingThreadFunction, NULL);
+	err = pthread_create(&incrementingThread, NULL, incrementingThreadFunction, (void*)&lock);
 	assert(err == 0);
 
-	err = pthread_create(&decrementingThread, NULL, decrementingThreadFunction, NULL);
+	err = pthread_create(&decrementingThread, NULL, decrementingThreadFunction, (void*)&lock);
 	assert(err == 0);
 
 	// wait

@@ -26,4 +26,27 @@ The magic number is: 10512
 [pavel@Station go]$ 
 ```
 
-The results appears random because thread increment and thread decrement access and modifies the same variable out of order. I tried to fix it with a mutex lock however it for some reason didn't work either. Maybe I'll figure it out at some later point. 
+The results appears random because thread increment and thread decrement access and modifies the same variable out of order. ~~I tried to fix it with a mutex lock however it for some reason didn't work either. Maybe I'll figure it out at some later point.~~ I've solved it by adding a mutex lock so the changes are done one at a time.
+```bash
+[pavel@Station c]$ for i in {1..10}; do ./foo ; done
+The magic number is: 0
+The magic number is: 0
+The magic number is: 0
+The magic number is: 0
+The magic number is: 0
+The magic number is: 0
+The magic number is: 0
+The magic number is: 0
+The magic number is: 0
+The magic number is: 0
+[pavel@Station c]$
+```
+This comes however at a cost of having less readable code. Just passing a mutex lock to the thread looks like a hack:
+
+```c
+pthread_mutex_t lock;
+pthread_t incrementingThread;
+static void *incrementingThreadFunction(void* lock);
+
+pthread_create(&incrementingThread, NULL, incrementingThreadFunction, (void*)&lock);
+```
