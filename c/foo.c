@@ -45,12 +45,14 @@ static void *decrementingThreadFunction(void* lock)
 int main()
 {
 	// init variables
+	int err;
 #ifdef mutex_lock
 	pthread_mutex_t lock;
+	err = pthread_mutex_init(&lock,NULL);
+	assert(err==0);
 #endif
 
 	pthread_t incrementingThread, decrementingThread;
-	int err;
 
 	// create threads
 	err = pthread_create(&incrementingThread, NULL, incrementingThreadFunction, (void*)&lock);
