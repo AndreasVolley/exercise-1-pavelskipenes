@@ -67,7 +67,7 @@ int main()
 
 	// cleanup
 #ifdef mutex_lock
-	int pthread_mutex_destroy(pthread_mutex_t * mutex);
+	pthread_mutex_destroy(&lock);
 #endif
 
 	printf("The magic number is: %d\n", i);
