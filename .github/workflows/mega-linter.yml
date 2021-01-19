@@ -52,6 +52,12 @@ jobs:
           DISABLE_LINTERS: C_CPPLINT
           SPELL_CSPELL_CONFIG_FILE: .config/.cspell.json
 
+      # C/C++ Static Analysis
+      - name: Install C/C++ Static analysis
+        run: sudo apt install cppcheck
+      - name: C/C++ Static analysis
+        run: cppcheck --enable=all , --error-exitcode=1 c
+
       # Upload Mega-Linter artifacts
       - name: Archive production artifacts
         if: ${{ success() }} || ${{ failure() }}
