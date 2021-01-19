@@ -32,7 +32,7 @@ static void *decrementingThreadFunction(void* lock)
 		pthread_mutex_unlock(lock);
 		return NULL;
 #endif
-		i++;
+		i--;
 	}
 	return NULL;
 }
