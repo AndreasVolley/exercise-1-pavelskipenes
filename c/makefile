@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -Wall -Wextra -g3 -std=c99 -fanalyzer
+CFLAGS = -Wall -Wextra -g3 -std=c99 -fanalyzer # -fanalyzer requires gcc version 10 or greater.
 LDFLAGS = -lpthread -g3
 SRC = foo.c
 

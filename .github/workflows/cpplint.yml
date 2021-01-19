@@ -1,0 +1,26 @@
+name: Build
+
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install cppcheck
+      run: sudo apt install -y cppcheck
+    - name: Get version cppcheck
+      run: cppcheck --version
+    - name: Run cppcheck
+      run: cppcheck --enable=all --error-exitcode=1 --suppress=missingIncludeSystem ./c
+  
+  compile:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: get version gcc
+      run: gcc --version
+    - name: run make
+      run: cd c; make
