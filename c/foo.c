@@ -9,7 +9,7 @@
 int i = 0;
 static const size_t ITERATIONS = 1000000;
 
-static void *incrementingThreadFunction(void* lock)
+static void *incrementingThreadFunction(void *lock)
 {
 	for (size_t _ = 0; _ < ITERATIONS; _++) {
 #ifdef mutex_lock
@@ -23,7 +23,7 @@ static void *incrementingThreadFunction(void* lock)
 	return NULL;
 }
 
-static void *decrementingThreadFunction(void* lock)
+static void *decrementingThreadFunction(void *lock)
 {
 	for (size_t _ = 0; _ < ITERATIONS; _++) {
 #ifdef mutex_lock
@@ -43,17 +43,17 @@ int main()
 	int err;
 #ifdef mutex_lock
 	pthread_mutex_t lock;
-	err = pthread_mutex_init(&lock,NULL);
-	assert(err==0);
+	err = pthread_mutex_init(&lock, NULL);
+	assert(err == 0);
 #endif
 
 	pthread_t incrementingThread, decrementingThread;
 
 	// create threads
-	err = pthread_create(&incrementingThread, NULL, incrementingThreadFunction, (void*)&lock);
+	err = pthread_create(&incrementingThread, NULL, incrementingThreadFunction, (void *)&lock);
 	assert(err == 0);
 
-	err = pthread_create(&decrementingThread, NULL, decrementingThreadFunction, (void*)&lock);
+	err = pthread_create(&decrementingThread, NULL, decrementingThreadFunction, (void *)&lock);
 	assert(err == 0);
 
 	// wait
