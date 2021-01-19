@@ -14,13 +14,11 @@ static void *incrementingThreadFunction(void* lock)
 	for (size_t _ = 0; _ < ITERATIONS; _++) {
 #ifdef mutex_lock
 		pthread_mutex_lock(lock);
-#endif
-
 		i++;
-
-#ifdef mutex_lock
 		pthread_mutex_unlock(lock);
+		return;
 #endif
+		i++;
 	}
 	return NULL;
 }
@@ -28,16 +26,13 @@ static void *incrementingThreadFunction(void* lock)
 static void *decrementingThreadFunction(void* lock)
 {
 	for (size_t _ = 0; _ < ITERATIONS; _++) {
-
 #ifdef mutex_lock
 		pthread_mutex_lock(lock);;
-#endif
-
 		i--;
-
-#ifdef mutex_lock
 		pthread_mutex_unlock(lock);
+		return;
 #endif
+		i++;
 	}
 	return NULL;
 }
