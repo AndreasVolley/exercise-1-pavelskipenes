@@ -16,7 +16,7 @@ static void *incrementingThreadFunction(void* lock)
 		pthread_mutex_lock(lock);
 		i++;
 		pthread_mutex_unlock(lock);
-		return;
+		return NULL;
 #endif
 		i++;
 	}
@@ -30,7 +30,7 @@ static void *decrementingThreadFunction(void* lock)
 		pthread_mutex_lock(lock);;
 		i--;
 		pthread_mutex_unlock(lock);
-		return;
+		return NULL;
 #endif
 		i++;
 	}
