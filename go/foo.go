@@ -10,16 +10,16 @@ import (
 
 var i = 0
 
-const ITERATIONS = 1000000
-
 func incrementing() {
-	for a := 0; a < ITERATIONS; a++ {
+	//TODO: increment i 1000000 times
+	for x := 0; x < 1000000; x++ {
 		i++
 	}
 }
 
 func decrementing() {
-	for a := 0; a < ITERATIONS; a++ {
+	//TODO: decrement i 1000000 times
+	for y := 0; y < 1000000; y++ {
 		i--
 	}
 }
@@ -31,8 +31,7 @@ func main() {
 	// TODO: Spawn both functions as goroutines
 	go incrementing()
 	go decrementing()
-
-	// We have no way to wait for the completion of a goroutine (without additional synchronization of some sort)
+	// We have no way to wait for the completion of a goroutine (without additional syncronization of some sort)
 	// We'll come back to using channels in Exercise 2. For now: Sleep.
 	time.Sleep(500 * time.Millisecond)
 	Println("The magic number is:", i)
